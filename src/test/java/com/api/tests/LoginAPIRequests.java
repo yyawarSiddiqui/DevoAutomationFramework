@@ -23,7 +23,7 @@ public class LoginAPIRequests {
 		requestSpecification
 				.body("{\r\n" + "    \"username\": \"iamfd\",\r\n" + "    \"password\": \"password\"\r\n" + "}");
 
-		Response response = requestSpecification.post("login");
+		Response response = requestSpecification.post("/login");
 		System.out.println("Response_Body"+response.asPrettyString());
 		System.out.println("Status_Code="+response.statusCode());
 
