@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Suite1" verbose="1">
+	<test name="API Test">
+		<classes>
+			<class name="com.api.tests.CreateJobAPIRequest" />
+			<class name="com.api.tests.EngineerDetailsRequest" />
+			<class name="com.api.tests.FDCountAPIRequest" />
+			<class name="com.api.tests.LoginAPIRequests" />
+			<class name="com.api.tests.MasterAPIRequest" />
+			<class name="com.api.tests.PendingForJobAssignment" />
+			<class name="com.api.tests.SUPLoginrequest" />
+			<class name="com.api.tests.UserDetailAPIRequests" />
+			<class name="com.api.tests.CountAPIRequest" />
+		</classes>
+	</test>
+</suite>
