@@ -2,42 +2,47 @@ package com.api.tests;
 
 import static io.restassured.RestAssured.*;
 
+import java.io.File;
+
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import com.pojo.FDUserDetailsAPIRequestPOJO;
 import static com.utility.TestUtility.*;
 
 import io.restassured.http.Header;
+import io.restassured.module.jsv.JsonSchemaValidator;
 
 public class UserDetailAPIRequests {
 	static {
 
 		baseURI = "http://139.59.91.96:9000/v1";
 	}
+	
+	private File JSonSchemaFile=new File(System.getProperty("user.dir")+File.separator+"src"+File.separator+"test"+File.separator+"resources"+File.separator+"responseSchema"+File.separator+"UserDetailAPIRequests.json");
 
-	@Test(description="Test get UserDetailAPIRequests")
-	public  void UserDetailAPIRequestsTest() {
+	@Test(description = "Test get UserDetailAPIRequests")
+	public void UserDetailAPIRequestsTest() {
 
+		Header Myheader = new Header("Authorization", getToken("fd"));
 
-		Header Myheader = new Header("Authorization",
-				"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZmlyc3RfbmFtZSI6ImZkIiwibGFzdF9uYW1lIjoiZmQiLCJsb2dpbl9pZCI6ImlhbWZkIiwibW9iaWxlX251bWJlciI6Ijg4OTk3NzY2NTUiLCJlbWFpbF9pZCI6Im1hcmtAZ21haWwuY29tIiwicGFzc3dvcmQiOiI1ZjRkY2MzYjVhYTc2NWQ2MWQ4MzI3ZGViODgyY2Y5OSIsInJlc2V0X3Bhc3N3b3JkX2RhdGUiOm51bGwsImxvY2tfc3RhdHVzIjowLCJpc19hY3RpdmUiOjEsIm1zdF9yb2xlX2lkIjo1LCJtc3Rfc2VydmljZV9sb2NhdGlvbl9pZCI6MSwiY3JlYXRlZF9hdCI6IjIwMjEtMTEtMDNUMDg6MDY6MjMuMDAwWiIsIm1vZGlmaWVkX2F0IjoiMjAyMS0xMS0wM1QwODowNjoyMy4wMDBaIiwicm9sZV9uYW1lIjoiRnJvbnREZXNrIiwic2VydmljZV9sb2NhdGlvbiI6IlNlcnZpY2UgQ2VudGVyIEEiLCJpYXQiOjE3MjQ2NDM3NjF9.JBSIz6JJUm6MGkdN8505Bnv_AmF7TqzkI4LdscIi-kw");
-
-		FDUserDetailsAPIRequestPOJO fDUserDetailsAPIRequestPOJO=given()
+//		FDUserDetailsAPIRequestPOJO fDUserDetailsAPIRequestPOJO=
+		given()
 				.when()
-				.header(Myheader)
+					.header(Myheader)
 				.and()
-				.get("userdetails")
+					.get("userdetails")
 				.then()
-				.log().all()
-				.assertThat()
+					.log().all()
+				.and()
+					.assertThat()
 				.statusCode(200)
-				.body("message", Matchers.equalTo("Success"))
-				.extract()
-		.as(FDUserDetailsAPIRequestPOJO.class);
-		
-		System.out.println(fDUserDetailsAPIRequestPOJO);
-		System.out.println(convertPOJOTOJSON(fDUserDetailsAPIRequestPOJO));
+					.body("message", Matchers.equalTo("Success"))
+				.body(JsonSchemaValidator.matchesJsonSchema(JSonSchemaFile));
+					//.extract()
+//				.as(FDUserDetailsAPIRequestPOJO.class);
+//		
+//		//System.out.println(fDUserDetailsAPIRequestPOJO);
+//		System.out.println(convertPOJOTOJSON(fDUserDetailsAPIRequestPOJO));
 
 
 	}
