@@ -2,7 +2,7 @@ package com.pojo;
 
 import java.util.Arrays;
 
-public class dataPOJOMaster {
+public final class dataPOJOMaster {
 
 	private MstOem[] mst_oem;
 

@@ -1,6 +1,6 @@
 package com.pojo;
 
-public class DataPOJOFDCount {
+public final class DataPOJOFDCount {
 	
 	 private String label; 
       private String key; 

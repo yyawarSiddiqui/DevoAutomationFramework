@@ -1,6 +1,6 @@
 package com.pojo;
 
-public class CustomerPOJO {
+public final class CustomerPOJO {
 
 	private String first_name;
 	private String last_name;

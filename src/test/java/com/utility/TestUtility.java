@@ -2,12 +2,15 @@ package com.utility;
 
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
+import com.opencsv.CSVReader;
 import com.pojo.CreateJobPOJO;
+import com.pojo.CreateJobResponsePojo;
 import com.pojo.CustomerAddressPOJO;
 import com.pojo.CustomerPOJO;
 import com.pojo.Customer_productPOJO;
 import com.pojo.FDDashboardDetailsAPIRequestPOJO;
 import com.pojo.LoginRequestPOJO;
+import com.pojo.LoginResponse;
 import com.pojo.LoginSupervisorAPIRequestPOJO;
 import com.pojo.problemsPOJO;
 
@@ -15,12 +18,41 @@ import io.restassured.http.Header;
 
 import static io.restassured.RestAssured.*;
 
-public class TestUtility {
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public abstract class TestUtility {
 
 	public static String convertPOJOTOJSON(Object data) {
 
 		Gson gson = new Gson();
 		String result = gson.toJson(data);
+		return result;
+
+	}
+
+	public static LoginResponse convertJSONTOPOJOLoginResponse(String jsondata) {
+
+		Gson gson = new Gson();
+		LoginResponse result = gson.fromJson(jsondata, LoginResponse.class);
+		return result;
+
+	}
+
+	public static CreateJobResponsePojo convertJSONTOPOJOCreateJobResponse(String jsondata) {
+
+		Gson gson = new Gson();
+		CreateJobResponsePojo result = gson.fromJson(jsondata, CreateJobResponsePojo.class);
 		return result;
 
 	}
@@ -32,7 +64,6 @@ public class TestUtility {
 		String lastname = faker.name().lastName();
 		String phoneNumber = faker.numerify("12########");
 		String altPhonenumber = faker.numerify("92########");
-		;
 		String email = faker.internet().emailAddress();
 		String imei = faker.numerify("12#############");
 
@@ -100,6 +131,92 @@ public class TestUtility {
 
 		return token;
 
+	}
+
+	public static Iterator<String[]> readCSVFile(String FileName) {
+
+		File CsvFile = new File(
+				System.getProperty("user.dir") + File.separator + "testdata" + File.separator + FileName);
+
+		FileReader fileReader = null;
+		CSVReader csvReader;
+		List<String[]> datalist = null;
+
+		try {
+
+			fileReader = new FileReader(CsvFile);
+
+			csvReader = new CSVReader(fileReader);
+
+			// csvReader.readNext(); Reads the next line
+
+			datalist = csvReader.readAll();// Returns list of String array
+
+			csvReader.close();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		Iterator<String[]> dataiterator = datalist.iterator();
+
+		dataiterator.next();
+
+		return dataiterator;
+	}
+
+	public static String[][] ReadExcel() {
+
+		try {
+			XSSFWorkbook xssfWorkbook = new XSSFWorkbook(
+					System.getProperty("user.dir") + File.separator + "testdata" + File.separator + "logindata.xlsx");
+
+			XSSFSheet Sheet = xssfWorkbook.getSheetAt(0);
+
+			int lastIndexofRow = Sheet.getLastRowNum();// gives index of number of rows
+
+			XSSFRow Row = Sheet.getRow(0);
+
+			int totalNoofColumns = Row.getLastCellNum(); // gives number of Column
+
+			String mydata[][] = new String[lastIndexofRow][totalNoofColumns];// Remove +1 as we start from row 2
+
+			XSSFRow xssfRow;
+			XSSFCell xssfcell;
+
+			for (int rowindex = 1; rowindex <= lastIndexofRow; rowindex++) {
+
+				for (int colindex = 0; colindex < totalNoofColumns; colindex++) {
+
+					xssfRow = Sheet.getRow(rowindex);
+					xssfcell = xssfRow.getCell(colindex);
+
+					mydata[rowindex - 1][colindex] = xssfcell.getStringCellValue();
+
+				}
+
+			}
+
+			xssfWorkbook.close();
+			return mydata;
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	public static String getTime() {
+		Date date = new Date();
+		System.out.println(date.toString());
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-YYYY HH:mm");
+		String FormatedDate=simpleDateFormat.format(date);
+		return FormatedDate;
+		
 	}
 
 }

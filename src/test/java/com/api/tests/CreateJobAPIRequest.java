@@ -4,14 +4,22 @@ import static com.utility.TestUtility.*;
 
 import static io.restassured.RestAssured.*;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.dao.tr_job_head_DAO;
+import com.db.pojo.Job_Head_POJO;
+import com.pojo.CreateJobResponsePojo;
+import com.utility.TestUtility;
+
 import io.restassured.http.Header;
+import io.restassured.response.Response;
 
 public class CreateJobAPIRequest {
 
 	private Header myheader;
+	CreateJobResponsePojo createJobResponsePojo;
 	
 	static {
 
@@ -30,21 +38,27 @@ public class CreateJobAPIRequest {
 	public void CreateJobAPIRequestTest() {
 
 		
-		given()
+		Response response=given()
 			.contentType("application/json")
 		.header(myheader)
 			.and()
 		.body(convertPOJOTOJSON(getCreateJobJsonData()))
 		.log().all()
 			.when()
-		. post("/job/create")
-			.then()
-		.log().all()
-			.assertThat()
-		.statusCode(200)
-		.extract()
-		.body();
+		. post("/job/create");
+		
+		 createJobResponsePojo=TestUtility.convertJSONTOPOJOCreateJobResponse(response.asString());
+		System.out.println(createJobResponsePojo);
 
 	}
 
+	
+	@Test(description="test Entries in DB", groups= {"sanity","smoke"}, dependsOnMethods = {"CreateJobAPIRequestTest"})
+	public void ValidateEntriesinDB() {
+		
+		tr_job_head_DAO tr_job_head_DAO=new tr_job_head_DAO();
+		Job_Head_POJO datafromDB=tr_job_head_DAO.getJobDetails(createJobResponsePojo.getData().getId());
+		Assert.assertEquals(datafromDB.getId(), createJobResponsePojo.getData().getId());
+		
+	}
 }

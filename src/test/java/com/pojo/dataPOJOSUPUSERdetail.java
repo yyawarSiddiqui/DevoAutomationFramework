@@ -1,6 +1,6 @@
 package com.pojo;
 
-public class dataPOJOSUPUSERdetail {
+public final class dataPOJOSUPUSERdetail {
 
 	private int  id; 
 	private String first_name; 

@@ -1,6 +1,6 @@
 package com.pojo;
 
-public class Customer_productPOJO {
+public final class Customer_productPOJO {
 	
 	private String dop; 
 	private String serial_number; 
