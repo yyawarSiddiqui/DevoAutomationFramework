@@ -61,10 +61,11 @@ public class MyTestListener implements ITestListener {
 
 			e.printStackTrace();
 		}
-		Extentreporter = new ExtentSparkReporter(System.getProperty("user.dir")+"/report/ExtentReport.html");
-		Extentreports = new ExtentReports();
+		Extentreporter = new ExtentSparkReporter(System.getProperty("user.dir")+"/report/ExtentReport.html");//this creates a Report directory deals with UI
+		
+		Extentreports = new ExtentReports();//This deals with dumping of data 
 
-		Extentreports.attachReporter(Extentreporter);
+		Extentreports.attachReporter(Extentreporter);//Attach Reporter here
 
 	}
 
