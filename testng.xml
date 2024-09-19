@@ -14,4 +14,12 @@
 			<class name="com.api.tests.CountAPIRequest" />
 		</classes>
 	</test>
+
+	<test name="API Test">
+		<packages>
+			<package name="com.ui.tests"></package>
+		</packages>
+	</test>
+
+
 </suite>
